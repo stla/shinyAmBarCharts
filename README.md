@@ -1,2 +1,9 @@
 # shinyAmBarCharts
-'AmCharts' bar charts for Shiny
+
+'AmCharts' bar charts for Shiny.
+
+*Installation:*
+
+```
+devtools::install_github("stla/shinyAmBarCharts")
+```

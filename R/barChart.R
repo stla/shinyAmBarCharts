@@ -90,6 +90,7 @@ registerInputHandler("dataframe", function(data, ...) {
 #'   }
 #'
 #'   shinyApp(ui, server)
+#'
 #' }
 #'
 #' if(interactive()){
