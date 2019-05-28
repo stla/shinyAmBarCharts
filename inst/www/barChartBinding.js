@@ -89,8 +89,8 @@ $.extend(barChartBinding, {
 			title.fontSize = chartTitle.fontSize || 22;
 			title.fontWeight = "bold";
 			title.fontFamily = "Tahoma";
-			title.y = am4core.percent(-28);
-			title.x = am4core.percent(-15);
+			title.y = -42;
+			title.x = -45;
 			title.horizontalCenter = "left";
 			title.zIndex = 100;
 			title.fillOpacity = 1;

@@ -1,10 +1,3 @@
-#' @import shiny
-#' @importFrom jsonlite fromJSON toJSON
-registerInputHandler("dataframe", function(data, ...) {
-  fromJSON(toJSON(data, auto_unbox = TRUE))
-}, force = TRUE)
-
-
 #' Bar chart
 #' @description Constructs a bar chart.
 #'
@@ -39,7 +32,8 @@ registerInputHandler("dataframe", function(data, ...) {
 #' @param style inline CSS for the container
 #'
 #' @export
-#'
+#' @import shiny
+#' @importFrom jsonlite fromJSON toJSON
 #' @examples
 #' if(interactive()){
 #'
@@ -200,6 +194,9 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
     prefix = "wwwAC",
     directoryPath = system.file("www", package="shinyAmBarCharts")
   )
+  registerInputHandler("dataframe", function(data, ...) {
+    fromJSON(toJSON(data, auto_unbox = TRUE))
+  }, force = TRUE)
   if(!is.null(theme)){
     theme <- match.arg(theme, c("dataviz","material","kelly","dark",
                                 "frozen","moonrisekingdom","spiritedaway"))
