@@ -311,18 +311,20 @@ $.extend(barChartBinding, {
 			// you can change any property on hover state and it will be animated
 			columnHoverState.properties.fillOpacity = 1;
 			columnHoverState.properties.strokeWidth = 3;
-			// show bullet when hovered, and hide label because the tooltip is shown
-			columnTemplate.events.on("over", event => {
-				var dataItem = event.target.dataItem;
-				var itemLabelBullet = dataItem.bullets.getKey(labelBullet.uid);
-				itemLabelBullet.fillOpacity = 0;
-			});
-			// hide bullet when mouse is out, and show label
-			columnTemplate.events.on("out", event => {
-				var dataItem = event.target.dataItem;
-				var itemLabelBullet = dataItem.bullets.getKey(labelBullet.uid);
-				itemLabelBullet.fillOpacity = 1;
-			});
+			if (tooltipStyle !== null) {
+  			// hide label when hovered because the tooltip is shown
+	  		columnTemplate.events.on("over", event => {
+		  		var dataItem = event.target.dataItem;
+			  	var itemLabelBullet = dataItem.bullets.getKey(labelBullet.uid);
+				  itemLabelBullet.fillOpacity = 0;
+  			});
+	  		// show label when mouse is out
+		  	columnTemplate.events.on("out", event => {
+			  	var dataItem = event.target.dataItem;
+				  var itemLabelBullet = dataItem.bullets.getKey(labelBullet.uid);
+  				itemLabelBullet.fillOpacity = 1;
+	  		});
+			}
 			if (draggable[i]) {
   			// start dragging bullet even if we hit on column not just a bullet, this will make it more friendly for touch devices
   			columnTemplate.events.on("down", event => {

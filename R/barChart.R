@@ -1,7 +1,7 @@
 #' Bar chart
 #' @description Constructs a bar chart.
 #'
-#' @param inputId the id
+#' @param inputId the id of the container
 #' @param width width in CSS units
 #' @param height height in CSS units
 #' @param data a dataframe

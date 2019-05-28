@@ -20,7 +20,7 @@ amBarChart(inputId, width = "100\%", height = "400px", data, category,
   style = "")
 }
 \arguments{
-\item{inputId}{the id}
+\item{inputId}{the id of the container}
 
 \item{width}{width in CSS units}
 
