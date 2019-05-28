@@ -203,6 +203,27 @@ $.extend(barChartBinding, {
 		  	tooltip.scale = tooltipStyle.scale || 1;
 	  		tooltip.background.filters.clear(); // remove tooltip shadow
   			tooltip.background.pointerLength = 10;
+			  tooltip.adapter.add("rotation", (x, target) => {
+				  if (target.dataItem.valueY >= 0) {
+				  	return 0;
+			  	} else {
+		  			return 180;
+	  			}
+  			});
+			  tooltip.label.adapter.add("verticalCenter", (x, target) => {
+				  if (target.dataItem.valueY >= 0) {
+				  	return "none";
+			  	} else {
+		  			return "bottom";
+	  			}
+  			});
+			  tooltip.label.adapter.add("rotation", (x, target) => {
+				  if (target.dataItem.valueY >= 0) {
+				  	return 0;
+			  	} else {
+		  			return 180;
+	  			}
+  			});
 			}
 
 			/* ~~~~\  label bullet  /~~~~ */
