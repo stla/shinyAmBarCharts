@@ -6,8 +6,9 @@
 \usage{
 amBarChart(inputId, width = "100\%", height = "400px", data, category,
   value, valueNames = value, minValue, maxValue, valueFormatter = "#.",
-  draggable = rep(FALSE, length(value)),
-  tooltipText = "[bold]{name}:\\n{valueY}[/]", chartTitle = NULL,
+  draggable = rep(FALSE, length(value)), tooltip = list(text =
+  "[bold]{name}:\\n{valueY}[/]", labelColor = "#ffffff", backgroundColor =
+  "#101010", backgroundOpacity = 1, scale = 1), chartTitle = NULL,
   columnStyle = list(fill = rep(list(NULL), length(value)), stroke =
   NULL, cornerRadius = NULL), backgroundColor = NULL, columnWidth = 80,
   xAxis = list(title = list(text = category, fontSize = 20, color =
@@ -45,7 +46,9 @@ value axis}
 \item{draggable}{logical vector, one entry for each value; whether the
 corresponding colum is draggable}
 
-\item{tooltipText}{the tooltip text, given as a formatted string; see
+\item{tooltip}{tooltip settings given as a list, or just a string for the
+\code{text} field, or \code{NULL} for no tooltip; the \code{text} field is
+given as a formatted string; see
 \url{https://www.amcharts.com/docs/v4/concepts/formatters/formatting-strings/}}
 
 \item{chartTitle}{chart title, \code{NULL}, character, or list of settings}
@@ -97,7 +100,7 @@ if(interactive()){
                "mybarchart", data = dat, height = "400px",
                category = "country", value = "visits",
                draggable = TRUE,
-               tooltipText = "[font-style:italic;#ffff00]{valueY}[/]",
+               tooltip = "[font-style:italic;#ffff00]{valueY}[/]",
                chartTitle =
                 list(text = "Visits per country", fontSize = 22, color = "orangered"),
                xAxis = list(title = list(text = "Country", color = "maroon")),

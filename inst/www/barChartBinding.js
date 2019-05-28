@@ -53,8 +53,7 @@ $.extend(barChartBinding, {
 		}
 		var chartCaption = $el.data("caption");
 		var gridLines = $el.data("gridlines");
-		var tooltipText = $el.data("tooltiptext");
-
+		var tooltipStyle = $el.data("tooltipstyle");
 
 		/* ~~~~\  theme  /~~~~ */
 		if (theme !== null) {
@@ -191,18 +190,20 @@ $.extend(barChartBinding, {
 			series.defaultState.interpolationDuration = 1500;
 
 			/* ~~~~\  tooltip  /~~~~ */
-			var tooltip = series.tooltip;
-			tooltip.pointerOrientation = "vertical";
-			tooltip.dy = 0;
-			tooltip.getFillFromObject = false;
-			tooltip.background.fill = am4core.color("#101010");
-			tooltip.background.fillOpacity = 1;
-			tooltip.autoTextColor = false;
-			tooltip.label.fill = am4core.color("#FFFFFF");
-			tooltip.label.textAlign = "middle";
-			tooltip.scale = 1;
-			tooltip.background.filters.clear(); // remove tooltip shadow
-			tooltip.background.pointerLength = 10;
+			if (tooltipStyle !== null) {
+  			var tooltip = series.tooltip;
+  			tooltip.pointerOrientation = "vertical";
+	  		tooltip.dy = 0;
+  			tooltip.getFillFromObject = false;
+			  tooltip.background.fill = tooltipStyle.backgroundColor; //am4core.color("#101010");
+		  	tooltip.background.fillOpacity = tooltipStyle.backgroundOpacity;
+	  		tooltip.autoTextColor = false;
+  			tooltip.label.fill = tooltipStyle.labelColor;//am4core.color("#FFFFFF");
+			  tooltip.label.textAlign = "middle";
+		  	tooltip.scale = tooltipStyle.scale || 1;
+	  		tooltip.background.filters.clear(); // remove tooltip shadow
+  			tooltip.background.pointerLength = 10;
+			}
 
 			/* ~~~~\  label bullet  /~~~~ */
 			var labelBullet = new am4charts.LabelBullet();
@@ -266,14 +267,16 @@ $.extend(barChartBinding, {
 			columnTemplate.strokeOpacity = 1;
 			columnTemplate.column.fillOpacity = 0.8;
 			columnTemplate.column.strokeWidth = 1;
-			columnTemplate.tooltipText = tooltipText;
-			columnTemplate.adapter.add("tooltipY", (x, target) => {
-				if (target.dataItem.valueY > 0) {
-					return 0;
-				} else {
-					return -valueAxis.valueToPoint(maxValue - target.dataItem.valueY).y;
-				}
-			});
+			if (tooltipStyle !== null) {
+  			columnTemplate.tooltipText = tooltipStyle.text;
+	  		columnTemplate.adapter.add("tooltipY", (x, target) => {
+		  		if (target.dataItem.valueY > 0) {
+			  		return 0;
+				  } else {
+					  return -valueAxis.valueToPoint(maxValue - target.dataItem.valueY).y;
+				  }
+			  });
+			}
 			var cr = columnStyle.cornerRadius || 8;
 			columnTemplate.column.adapter.add("cornerRadiusTopRight", (x, target) => {
 				if (target.dataItem.valueY > 0) {

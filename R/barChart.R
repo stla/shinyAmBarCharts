@@ -16,7 +16,9 @@
 #' \url{https://www.amcharts.com/docs/v4/concepts/formatters/formatting-numbers/}
 #' @param draggable logical vector, one entry for each value; whether the
 #' corresponding colum is draggable
-#' @param tooltipText the tooltip text, given as a formatted string; see
+#' @param tooltip tooltip settings given as a list, or just a string for the
+#' \code{text} field, or \code{NULL} for no tooltip; the \code{text} field is
+#' given as a formatted string; see
 #' \url{https://www.amcharts.com/docs/v4/concepts/formatters/formatting-strings/}
 #' @param chartTitle chart title, \code{NULL}, character, or list of settings
 #' @param columnStyle settings of the columns style given as a list
@@ -57,7 +59,7 @@
 #'                "mybarchart", data = dat, height = "400px",
 #'                category = "country", value = "visits",
 #'                draggable = TRUE,
-#'                tooltipText = "[font-style:italic;#ffff00]{valueY}[/]",
+#'                tooltip = "[font-style:italic;#ffff00]{valueY}[/]",
 #'                chartTitle =
 #'                 list(text = "Visits per country", fontSize = 22, color = "orangered"),
 #'                xAxis = list(title = list(text = "Country", color = "maroon")),
@@ -155,7 +157,13 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
                        minValue, maxValue,
                        valueFormatter = "#.",
                        draggable = rep(FALSE, length(value)),
-                       tooltipText = "[bold]{name}:\n{valueY}[/]",
+                       tooltip = list(
+                         text = "[bold]{name}:\n{valueY}[/]",
+                         labelColor = "#ffffff",
+                         backgroundColor = "#101010",
+                         backgroundOpacity = 1,
+                         scale = 1
+                       ),
                        chartTitle = NULL,
                        columnStyle = list(
                          fill = rep(list(NULL), length(value)),
@@ -214,6 +222,9 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
   if(is.character(caption)){
     caption <- list(text = caption)
   }
+  if(is.character(tooltip)){
+    tooltip <- list(text = tooltip)
+  }
   if(is.character(xAxis[["title"]])){
     xAxis[["title"]] <- list(text = xAxis[["title"]])
   }
@@ -265,8 +276,8 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
              `data-valuenames` = as.character(toJSON(valueNames)),
              `data-min` = minValue,
              `data-max` = maxValue,
-             `data-tooltiptext` = tooltipText,
-             `data-charttitle` = list2json(chartTitle) %||% "null",
+             `data-tooltipstyle` = list2json(tooltip),
+             `data-charttitle` = list2json(chartTitle),
              `data-columnstyle` = list2json(columnStyle),
              `data-columnwidth` = max(10,min(columnWidth,100)),
              `data-xaxis` = list2json(xAxis),
@@ -277,7 +288,7 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
              `data-gridlines` = list2json(gridLines),
              `data-legend` = ifelse(legend, "true", "false"),
              `data-draggable` = as.character(toJSON(draggable)),
-             `data-caption` = list2json(caption) %||% "null"
+             `data-caption` = list2json(caption)
     )
   )
 }
