@@ -5,7 +5,7 @@
 \title{Bar chart}
 \usage{
 amBarChart(inputId, width = "100\%", height = "400px", data, category,
-  value, minValue, maxValue, valueFormatter = "#.",
+  value, valueNames = value, minValue, maxValue, valueFormatter = "#.",
   draggable = rep(FALSE, length(value)), chartTitle = NULL,
   columnStyle = list(fill = rep(list(NULL), length(value)), stroke =
   NULL, cornerRadius = NULL), backgroundColor = NULL, columnWidth = 80,
@@ -31,6 +31,8 @@ category axis}
 
 \item{value}{name(s) of the column(s) of \code{data} to be used on the
 value axis}
+
+\item{valueNames}{names of the values variables, to appear in the legend}
 
 \item{minValue}{minimum value}
 
@@ -146,6 +148,7 @@ if(interactive()){
              amBarChart(
                "mygroupedbarchart", data = dat, height = "400px",
                category = "country", value = c("income", "expenses"),
+               valueNames = c("Income", "Expenses"),
                draggable = c(TRUE,FALSE),
                backgroundColor = "#30303d",
                columnStyle = list(fill = c("darkmagenta", "darkred"),

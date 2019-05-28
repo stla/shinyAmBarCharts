@@ -9,6 +9,7 @@
 #' category axis
 #' @param value name(s) of the column(s) of \code{data} to be used on the
 #' value axis
+#' @param valueNames names of the values variables, to appear in the legend
 #' @param minValue minimum value
 #' @param maxValue maximum value
 #' @param valueFormatter a number formatter; see
@@ -109,6 +110,7 @@
 #'              amBarChart(
 #'                "mygroupedbarchart", data = dat, height = "400px",
 #'                category = "country", value = c("income", "expenses"),
+#'                valueNames = c("Income", "Expenses"),
 #'                draggable = c(TRUE,FALSE),
 #'                backgroundColor = "#30303d",
 #'                columnStyle = list(fill = c("darkmagenta", "darkred"),
@@ -146,7 +148,8 @@
 #'
 #' }
 amBarChart <- function(inputId, width = "100%", height = "400px",
-                       data, category, value, minValue, maxValue,
+                       data, category, value, valueNames = value,
+                       minValue, maxValue,
                        valueFormatter = "#.",
                        draggable = rep(FALSE, length(value)),
                        chartTitle = NULL,
@@ -255,6 +258,7 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
              `data-data` = as.character(toJSON(data)),
              `data-category` = category,
              `data-value` = as.character(toJSON(value)),
+             `data-valuenames` = as.character(toJSON(valueNames)),
              `data-min` = minValue,
              `data-max` = maxValue,
              `data-charttitle` = list2json(chartTitle) %||% "null",

@@ -29,6 +29,10 @@ $.extend(barChartBinding, {
 		if (!(valueField instanceof Array)) {
 			valueField = [valueField];
 		}
+		var valueNames = $el.data("valuenames");
+		if (!(valueNames instanceof Array)) {
+			valueNames = [valueNames];
+		}
 		var minValue = $el.data("min");
 		var maxValue = $el.data("max");
 		var columnStyle = $el.data("columnstyle");
@@ -181,7 +185,7 @@ $.extend(barChartBinding, {
 			var series = chart.series.push(new am4charts.ColumnSeries());
 			series.dataFields.categoryX = categoryField;
 			series.dataFields.valueY = valueField[i];
-			series.name = valueField[i];
+			series.name = valueNames[i];
 			series.sequencedInterpolation = true;
 			series.defaultState.interpolationDuration = 1500;
 
