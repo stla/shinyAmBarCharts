@@ -56,7 +56,7 @@
 #'     fluidRow(
 #'       column(10,
 #'              amHorizontalBarChart(
-#'                "mybarchart", data = dat, height = "400px",
+#'                "mybarchart", data = dat, height = "550px",
 #'                category = "country", value = "visits",
 #'                draggable = TRUE,
 #'                tooltip = "[font-style:italic;#ffff00]{valueX}[/]",
