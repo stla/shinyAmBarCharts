@@ -203,28 +203,30 @@ $.extend(horizontalBarChartBinding, {
 		  	tooltip.scale = tooltipStyle.scale || 1;
 	  		tooltip.background.filters.clear(); // remove tooltip shadow
   			tooltip.background.pointerLength = 10;
-  			console.log(tooltip);
-			  tooltip.adapter.add("rotation", (x, target) => {
+  			tooltip.rotation = 180;
+  			tooltip.label.verticalCenter = "bottom";
+  			tooltip.label.rotation = 180;
+/*			  tooltip.adapter.add("rotation", (x, target) => {
 				  if (target.dataItem.valueX >= 0) {
-				  	return 0;
+				  	return 180;
 			  	} else {
 		  			return 180;
 	  			}
   			});
 			  tooltip.label.adapter.add("verticalCenter", (x, target) => {
 				  if (target.dataItem.valueX >= 0) {
-				  	return "none";
+				  	return "bottom";
 			  	} else {
 		  			return "bottom";
 	  			}
   			});
 			  tooltip.label.adapter.add("rotation", (x, target) => {
 				  if (target.dataItem.valueX >= 0) {
-				  	return 0;
+				  	return 180;
 			  	} else {
 		  			return 180;
 	  			}
-  			});
+  			}); */
 			}
 
 			/* ~~~~\  label bullet  /~~~~ */

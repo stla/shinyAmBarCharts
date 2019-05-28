@@ -152,7 +152,7 @@ if(interactive()){
   ui <- fluidPage(
 
     fluidRow(
-      column(8,
+      column(9,
              amHorizontalBarChart(
                "mygroupedbarchart", data = dat, height = "400px",
                category = "country", value = c("income", "expenses"),
@@ -170,7 +170,7 @@ if(interactive()){
                caption = list(text = "Year 2018"),
                theme = "dark")
       ),
-      column(4,
+      column(3,
              tags$label("Data:"),
              verbatimTextOutput("data"),
              br(),
