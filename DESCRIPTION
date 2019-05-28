@@ -1,0 +1,13 @@
+Package: shinyAmBarCharts
+Type: Package
+Title: 'AmCharts' Bar Charts
+Version: 0.1.0
+Author: Stéphane Laurent
+Maintainer: Stéphane Laurent <laurent_step@yahoo.fr>
+Description: Bar charts for Shiny.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: shiny,
+         jsonlite
+RoxygenNote: 6.1.1
