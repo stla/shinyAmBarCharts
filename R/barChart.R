@@ -16,6 +16,8 @@
 #' \url{https://www.amcharts.com/docs/v4/concepts/formatters/formatting-numbers/}
 #' @param draggable logical vector, one entry for each value; whether the
 #' corresponding colum is draggable
+#' @param tooltipText the tooltip text, given as a formatted string; see
+#' \url{https://www.amcharts.com/docs/v4/concepts/formatters/formatting-strings/}
 #' @param chartTitle chart title, \code{NULL}, character, or list of settings
 #' @param columnStyle settings of the columns style given as a list
 #' @param backgroundColor a HTML color for the chart background
@@ -55,6 +57,7 @@
 #'                "mybarchart", data = dat, height = "400px",
 #'                category = "country", value = "visits",
 #'                draggable = TRUE,
+#'                tooltipText = "[font-style:italic;#ffff00]{valueY}[/]",
 #'                chartTitle =
 #'                 list(text = "Visits per country", fontSize = 22, color = "orangered"),
 #'                xAxis = list(title = list(text = "Country", color = "maroon")),
@@ -118,7 +121,7 @@
 #'                chartTitle = list(text = "Income and expenses per country"),
 #'                xAxis = list(title = list(text = "Country")),
 #'                yAxis = list(title = list(text = "Income and expenses")),
-#'                minValue = 0, maxValue = 40,
+#'                minValue = 0, maxValue = 41,
 #'                valueFormatter = "#.#",
 #'                columnWidth = 90,
 #'                caption = list(text = "Year 2018"),
@@ -152,6 +155,7 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
                        minValue, maxValue,
                        valueFormatter = "#.",
                        draggable = rep(FALSE, length(value)),
+                       tooltipText = "[bold]{name}:\n{valueY}[/]",
                        chartTitle = NULL,
                        columnStyle = list(
                          fill = rep(list(NULL), length(value)),
@@ -261,6 +265,7 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
              `data-valuenames` = as.character(toJSON(valueNames)),
              `data-min` = minValue,
              `data-max` = maxValue,
+             `data-tooltiptext` = tooltipText,
              `data-charttitle` = list2json(chartTitle) %||% "null",
              `data-columnstyle` = list2json(columnStyle),
              `data-columnwidth` = max(10,min(columnWidth,100)),

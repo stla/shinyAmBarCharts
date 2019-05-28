@@ -53,6 +53,7 @@ $.extend(barChartBinding, {
 		}
 		var chartCaption = $el.data("caption");
 		var gridLines = $el.data("gridlines");
+		var tooltipText = $el.data("tooltiptext");
 
 
 		/* ~~~~\  theme  /~~~~ */
@@ -198,6 +199,7 @@ $.extend(barChartBinding, {
 			tooltip.background.fillOpacity = 1;
 			tooltip.autoTextColor = false;
 			tooltip.label.fill = am4core.color("#FFFFFF");
+			tooltip.label.textAlign = "middle";
 			tooltip.scale = 1;
 			tooltip.background.filters.clear(); // remove tooltip shadow
 			tooltip.background.pointerLength = 10;
@@ -264,7 +266,7 @@ $.extend(barChartBinding, {
 			columnTemplate.strokeOpacity = 1;
 			columnTemplate.column.fillOpacity = 0.8;
 			columnTemplate.column.strokeWidth = 1;
-			columnTemplate.tooltipText = "{valueY}";
+			columnTemplate.tooltipText = tooltipText;
 			columnTemplate.adapter.add("tooltipY", (x, target) => {
 				if (target.dataItem.valueY > 0) {
 					return 0;
