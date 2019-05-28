@@ -154,7 +154,7 @@ if(interactive()){
     fluidRow(
       column(9,
              amHorizontalBarChart(
-               "mygroupedbarchart", data = dat, height = "400px",
+               "mygroupedbarchart", data = dat, height = "550px",
                category = "country", value = c("income", "expenses"),
                valueNames = c("Income", "Expenses"),
                draggable = c(TRUE,FALSE),
