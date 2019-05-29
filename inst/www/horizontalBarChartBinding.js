@@ -8,7 +8,7 @@ $.extend(horizontalBarChartBinding, {
 		return $(el).data("data");
 	},
 	getType: function(el) {
-		return "dataframe";
+		return "shinyAmBarCharts.dataframe";
 	},
 	subscribe: function(el, callback) {
 		$(el).on("change.horizontalBarChartBinding", function(e) {
@@ -310,7 +310,7 @@ $.extend(horizontalBarChartBinding, {
 	  			dataItem.column.isHover = false;
 	  			event.target.isHover = false;
 		  		dataCopy[dataItem.index][valueField[i]] = dataItem.values.valueX.value;
-			  	Shiny.setInputValue(id + ":dataframe", dataCopy);
+			  	Shiny.setInputValue(id + ":shinyAmBarCharts.dataframe", dataCopy);
 				  Shiny.setInputValue(id + "_change", {
 					  index: dataItem.index,
   					category: dataItem.categoryY,

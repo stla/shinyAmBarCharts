@@ -223,7 +223,7 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
     prefix = "wwwAC",
     directoryPath = system.file("www", package="shinyAmBarCharts")
   )
-  registerInputHandler("dataframe", function(data, ...) {
+  registerInputHandler("shinyAmBarCharts.dataframe", function(data, ...) {
     fromJSON(toJSON(data, auto_unbox = TRUE))
   }, force = TRUE)
   if(!is.null(theme)){
