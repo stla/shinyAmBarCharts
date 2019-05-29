@@ -291,7 +291,7 @@ $.extend(horizontalBarChartBinding, {
 	  		bullet.opacity = 0; // initially invisible
 		  	bullet.defaultState.properties.opacity = 0;
 			  // resize cursor when over
-  			bullet.cursorOverStyle = am4core.MouseCursorStyle.verticalResize;
+  			bullet.cursorOverStyle = am4core.MouseCursorStyle.horizontalResize;
 	  		bullet.draggable = true;
 		  	// create bullet hover state
   			var hoverState = bullet.states.create("hover");
@@ -394,7 +394,7 @@ $.extend(horizontalBarChartBinding, {
 		  		var itemBullet = dataItem.bullets.getKey(bullet.uid);
 			  	itemBullet.dragStart(event.pointer);
 			  });
-			  // when columns position changes, adjust minX/maxX of bullets so that we could only dragg vertically
+			  // when columns position changes, adjust minX/maxX of bullets so that we could only dragg horizontally
   			columnTemplate.events.on("positionchanged", event => {
 	  			var dataItem = event.target.dataItem;
 			  	if(dataItem.bullets !== undefined){
