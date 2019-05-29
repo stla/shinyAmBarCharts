@@ -115,9 +115,9 @@ $.extend(barChartBinding, {
 		if (button !== null) {
   		var Button = chart.chartContainer.createChild(am4core.Button);
       Button.label.text = button.text;
-      Button.dy = -Button.parent.innerHeight*0.8;
+      Button.dy = -Button.parent.innerHeight * (button.position || 0.8);
       Button.padding(5, 5, 5, 5);
-      //button.width = 20;
+      //Button.background.fill =
       Button.align = "right";
       Button.marginRight = 15;
       Button.events.on("hit", function() {

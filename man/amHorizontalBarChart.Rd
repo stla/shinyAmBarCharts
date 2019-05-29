@@ -5,19 +5,20 @@
 \title{Horizontal bar chart}
 \usage{
 amHorizontalBarChart(inputId, width = "100\%", height = "400px", data,
-  category, value, valueNames = value, minValue, maxValue,
-  valueFormatter = "#.", draggable = rep(FALSE, length(value)),
-  tooltip = list(text = "[bold]{name}: {valueX}[/]", labelColor =
-  "#ffffff", backgroundColor = "#101010", backgroundOpacity = 1, scale =
-  1), chartTitle = NULL, columnStyle = list(fill = rep(list(NULL),
-  length(value)), stroke = NULL, cornerRadius = NULL),
+  data2 = NULL, category, value, valueNames = value, minValue,
+  maxValue, valueFormatter = "#.", draggable = rep(FALSE,
+  length(value)), tooltip = list(text = "[bold]{name}: {valueX}[/]",
+  labelColor = "#ffffff", backgroundColor = "#101010", backgroundOpacity =
+  1, scale = 1), chartTitle = NULL, columnStyle = list(fill =
+  rep(list(NULL), length(value)), stroke = NULL, cornerRadius = NULL),
   backgroundColor = NULL, columnWidth = 80, xAxis = list(title =
   list(text = category, fontSize = 20, color = NULL), labels = list(color =
   NULL, fontSize = 18, rotation = 0)), yAxis = list(title = list(text =
   value, fontSize = 20, color = NULL), labels = list(color = NULL, fontSize
   = 18, rotation = 0)), gridLines = list(color = NULL, opacity = NULL,
   width = NULL), legend = length(value) > 1, caption = NULL,
-  theme = NULL, style = "")
+  button = if (is.null(data2)) NULL else list(text = "Reset", position =
+  0.8), theme = NULL, style = "")
 }
 \arguments{
 \item{inputId}{the id of the container}
@@ -27,6 +28,8 @@ amHorizontalBarChart(inputId, width = "100\%", height = "400px", data,
 \item{height}{height in CSS units}
 
 \item{data}{a dataframe}
+
+\item{data2}{a dataframe used to update the data with the button}
 
 \item{category}{name of the column of \code{data} to be used on the
 category axis}
@@ -59,10 +62,10 @@ given as a formatted string; see
 
 \item{columnWidth}{column width in percent}
 
-\item{xAxis}{settings of the category axis given as a list, or just a string
+\item{xAxis}{settings of the value axis given as a list, or just a string
 for the axis title}
 
-\item{yAxis}{settings of the value axis given as a list, or just a string
+\item{yAxis}{settings of the category axis given as a list, or just a string
 for the axis title}
 
 \item{gridLines}{settings of the grid lines}
@@ -70,6 +73,12 @@ for the axis title}
 \item{legend}{logical, whether to display the legend}
 
 \item{caption}{settings of the caption, or \code{NULL} for no caption}
+
+\item{button}{\code{NULL} for no button, or settings of the buttons given as
+a list: a \code{text} field for the button label and a \code{position}
+field for the button position as a percentage (\code{0} for bottom,
+\code{1} for top); this button is used to replace the current data
+with \code{data2}}
 
 \item{theme}{theme, \code{NULL} or one of \code{"dataviz"}, \code{"material"},
 \code{"kelly"}, \code{"dark"}, \code{"moonrisekingdom"},
@@ -141,9 +150,14 @@ if(interactive()){
   library(shiny)
   library(shinyAmBarCharts)
 
+  dat0 <- data.frame(
+    country = c("USA", "China", "Japan", "Germany", "UK", "France"),
+    visits = rep(2000, 6),
+    income = rep(25, 6),
+    expenses = rep(20, 6)
+  )
   set.seed(666)
   dat <- data.frame(
-    country = c("USA", "China", "Japan", "Germany", "UK", "France"),
     visits = c(3025, 1882, 1809, 1322, 1122, 1114),
     income = rpois(6, 25),
     expenses = rpois(6, 20)
@@ -154,14 +168,16 @@ if(interactive()){
     fluidRow(
       column(9,
              amHorizontalBarChart(
-               "mygroupedbarchart", data = dat, height = "550px",
+               "mygroupedbarchart", data = dat0, data2 = dat, height = "550px",
                category = "country", value = c("income", "expenses"),
                valueNames = c("Income", "Expenses"),
-               draggable = c(TRUE,FALSE),
+               draggable = c(TRUE,TRUE),
+               button = list(text = "Show real data", position = 0.85),
                backgroundColor = "#30303d",
                columnStyle = list(fill = c("darkmagenta", "darkred"),
                                   stroke = "#cccccc"),
-               chartTitle = list(text = "Income and expenses per country"),
+               chartTitle =
+                 list(text = "Try to guess the real data (drag the columns)"),
                xAxis = list(title = list(text = "Income and expenses")),
                yAxis = list(title = list(text = "Country")),
                minValue = 0, maxValue = 41,
