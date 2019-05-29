@@ -54,6 +54,8 @@ $.extend(barChartBinding, {
 		var chartCaption = $el.data("caption");
 		var gridLines = $el.data("gridlines");
 		var tooltipStyle = $el.data("tooltipstyle");
+		var data2 = $el.data("data2");
+		var button = $el.data("button");
 
 		/* ~~~~\  theme  /~~~~ */
 		if (theme !== null) {
@@ -108,6 +110,25 @@ $.extend(barChartBinding, {
         chartCaption.color || (theme === "dark" ? "#ffffff" : "#000000");
       caption.align = chartCaption.align || "right";
     }
+
+		/* ~~~~\  button  /~~~~ */
+		if (button !== null) {
+  		var Button = chart.chartContainer.createChild(am4core.Button);
+      Button.label.text = button.text;
+      Button.dy = -Button.parent.innerHeight*0.8;
+      Button.padding(5, 5, 5, 5);
+      //button.width = 20;
+      Button.align = "right";
+      Button.marginRight = 15;
+      Button.events.on("hit", function() {
+        for (var r = 0; r < data.length; ++r){
+          for (var v = 0; v < valueField.length; ++v) {
+            chart.data[r][valueField[v]] = data2[r][valueField[v]];
+          }
+        }
+        chart.invalidateRawData();
+      });
+		}
 
 		/* ~~~~\  category axis  /~~~~ */
 		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());

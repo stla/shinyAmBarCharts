@@ -4,20 +4,21 @@
 \alias{amBarChart}
 \title{Bar chart}
 \usage{
-amBarChart(inputId, width = "100\%", height = "400px", data, category,
-  value, valueNames = value, minValue, maxValue, valueFormatter = "#.",
-  draggable = rep(FALSE, length(value)), tooltip = list(text =
-  "[bold]{name}:\\n{valueY}[/]", labelColor = "#ffffff", backgroundColor =
-  "#101010", backgroundOpacity = 1, scale = 1), chartTitle = NULL,
-  columnStyle = list(fill = rep(list(NULL), length(value)), stroke =
-  NULL, cornerRadius = NULL), backgroundColor = NULL, columnWidth = 80,
-  xAxis = list(title = list(text = category, fontSize = 20, color =
-  NULL), labels = list(color = NULL, fontSize = 18, rotation = 0)),
-  yAxis = list(title = list(text = value, fontSize = 20, color = NULL),
-  labels = list(color = NULL, fontSize = 18, rotation = 0)),
-  gridLines = list(color = NULL, opacity = NULL, width = NULL),
-  legend = length(value) > 1, caption = NULL, theme = NULL,
-  style = "")
+amBarChart(inputId, width = "100\%", height = "400px", data,
+  data2 = NULL, category, value, valueNames = value, minValue,
+  maxValue, valueFormatter = "#.", draggable = rep(FALSE,
+  length(value)), tooltip = list(text = "[bold]{name}:\\n{valueY}[/]",
+  labelColor = "#ffffff", backgroundColor = "#101010", backgroundOpacity =
+  1, scale = 1), chartTitle = NULL, columnStyle = list(fill =
+  rep(list(NULL), length(value)), stroke = NULL, cornerRadius = NULL),
+  backgroundColor = NULL, columnWidth = 80, xAxis = list(title =
+  list(text = category, fontSize = 20, color = NULL), labels = list(color =
+  NULL, fontSize = 18, rotation = 0)), yAxis = list(title = list(text =
+  value, fontSize = 20, color = NULL), labels = list(color = NULL, fontSize
+  = 18, rotation = 0)), gridLines = list(color = NULL, opacity = NULL,
+  width = NULL), legend = length(value) > 1, caption = NULL,
+  button = if (is.null(data2)) NULL else list(text = "Reset", position =
+  0.8), theme = NULL, style = "")
 }
 \arguments{
 \item{inputId}{the id of the container}
@@ -27,6 +28,8 @@ amBarChart(inputId, width = "100\%", height = "400px", data, category,
 \item{height}{height in CSS units}
 
 \item{data}{a dataframe}
+
+\item{data2}{a dataframe used to update the data with the button}
 
 \item{category}{name of the column of \code{data} to be used on the
 category axis}
@@ -71,6 +74,12 @@ for the axis title}
 
 \item{caption}{settings of the caption, or \code{NULL} for no caption}
 
+\item{button}{\code{NULL} for no button, or settings of the buttons given as
+a list: a \code{text} field for the button label and a \code{position}
+field for the button position as a percentage (\code{0} for bottom,
+\code{1} for top); this button is used to replace the current data
+with \code{data2}}
+
 \item{theme}{theme, \code{NULL} or one of \code{"dataviz"}, \code{"material"},
 \code{"kelly"}, \code{"dark"}, \code{"moonrisekingdom"},
 \code{"frozen"}, \code{"spiritedaway"}}
@@ -97,7 +106,7 @@ if(interactive()){
     fluidRow(
       column(8,
              amBarChart(
-               "mybarchart", data = dat, height = "400px",
+               "mybarchart", data = dat, data2 = dat, height = "400px",
                category = "country", value = "visits",
                draggable = TRUE,
                tooltip = "[font-style:italic;#ffff00]{valueY}[/]",

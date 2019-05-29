@@ -5,6 +5,7 @@
 #' @param width width in CSS units
 #' @param height height in CSS units
 #' @param data a dataframe
+#' @param data2 a dataframe used to update the data with the button
 #' @param category name of the column of \code{data} to be used on the
 #' category axis
 #' @param value name(s) of the column(s) of \code{data} to be used on the
@@ -31,6 +32,11 @@
 #' @param gridLines settings of the grid lines
 #' @param legend logical, whether to display the legend
 #' @param caption settings of the caption, or \code{NULL} for no caption
+#' @param button \code{NULL} for no button, or settings of the buttons given as
+#' a list: a \code{text} field for the button label and a \code{position}
+#' field for the button position as a percentage (\code{0} for bottom,
+#' \code{1} for top); this button is used to replace the current data
+#' with \code{data2}
 #' @param theme theme, \code{NULL} or one of \code{"dataviz"}, \code{"material"},
 #' \code{"kelly"}, \code{"dark"}, \code{"moonrisekingdom"},
 #' \code{"frozen"}, \code{"spiritedaway"}
@@ -56,7 +62,7 @@
 #'     fluidRow(
 #'       column(8,
 #'              amBarChart(
-#'                "mybarchart", data = dat, height = "400px",
+#'                "mybarchart", data = dat, data2 = dat, height = "400px",
 #'                category = "country", value = "visits",
 #'                draggable = TRUE,
 #'                tooltip = "[font-style:italic;#ffff00]{valueY}[/]",
@@ -153,7 +159,8 @@
 #'
 #' }
 amBarChart <- function(inputId, width = "100%", height = "400px",
-                       data, category, value, valueNames = value,
+                       data, data2 = NULL,
+                       category, value, valueNames = value,
                        minValue, maxValue,
                        valueFormatter = "#.",
                        draggable = rep(FALSE, length(value)),
@@ -203,6 +210,8 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
                        ),
                        legend = length(value) > 1,
                        caption = NULL,
+                       button =
+                         if(is.null(data2)) NULL else list(text = "Reset", position = 0.8),
                        theme = NULL,
                        style = ""){
   addResourcePath(
@@ -271,6 +280,7 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
     tags$div(id = inputId, class = "amBarChart",
              style = sprintf("width: %s; height: %s; %s", width, height, style),
              `data-data` = as.character(toJSON(data)),
+             `data-data2` = as.character(toJSON(data2)),
              `data-category` = category,
              `data-value` = as.character(toJSON(value)),
              `data-valuenames` = as.character(toJSON(valueNames)),
@@ -288,6 +298,7 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
              `data-gridlines` = list2json(gridLines),
              `data-legend` = ifelse(legend, "true", "false"),
              `data-draggable` = as.character(toJSON(draggable)),
+             `data-button` = list2json(button),
              `data-caption` = list2json(caption)
     )
   )
