@@ -115,9 +115,10 @@ $.extend(horizontalBarChartBinding, {
 		if (button !== null) {
   		var Button = chart.chartContainer.createChild(am4core.Button);
       Button.label.text = button.text;
+      Button.label.fill = button.color || Button.label.fill;
+      Button.background.fill = button.fill || Button.background.fill;
       Button.dy = -Button.parent.innerHeight * (button.position || 0.8);
       Button.padding(5, 5, 5, 5);
-      //Button.background.fill =
       Button.align = "right";
       Button.marginRight = 15;
       Button.events.on("hit", function() {

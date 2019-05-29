@@ -33,8 +33,9 @@
 #' @param legend logical, whether to display the legend
 #' @param caption settings of the caption, or \code{NULL} for no caption
 #' @param button \code{NULL} for no button, or settings of the buttons given as
-#' a list: a \code{text} field for the button label and a \code{position}
-#' field for the button position as a percentage (\code{0} for bottom,
+#' a list with these fields: \code{text} for the button label, \code{color} for
+#' the label color, \code{fill} for the button color, and \code{position}
+#' for the button position as a percentage (\code{0} for bottom,
 #' \code{1} for top); this button is used to replace the current data
 #' with \code{data2}
 #' @param theme theme, \code{NULL} or one of \code{"dataviz"}, \code{"material"},
@@ -218,7 +219,11 @@ amHorizontalBarChart <- function(inputId, width = "100%", height = "400px",
                                  legend = length(value) > 1,
                                  caption = NULL,
                                  button =
-                                   if(is.null(data2)) NULL else list(text = "Reset", position = 0.8),
+                                   if(is.null(data2)) NULL else list(
+                                     text = "Reset",
+                                     color = NULL,
+                                     fill = NULL,
+                                     position = 0.8),
                                  theme = NULL,
                                  style = ""){
   addResourcePath(
