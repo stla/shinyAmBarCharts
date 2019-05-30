@@ -15,10 +15,11 @@ amHorizontalBarChart(inputId, width = "100\%", height = "400px", data,
   list(text = category, fontSize = 20, color = NULL), labels = list(color =
   NULL, fontSize = 18, rotation = 0)), yAxis = list(title = list(text =
   value, fontSize = 20, color = NULL), labels = list(color = NULL, fontSize
-  = 18, rotation = 0)), gridLines = list(color = NULL, opacity = NULL,
-  width = NULL), legend = length(value) > 1, caption = NULL,
-  button = if (is.null(data2)) NULL else list(text = "Reset", color =
-  NULL, fill = NULL, position = 0.8), theme = NULL, style = "")
+  = 18, rotation = 0)), scrollbarX = FALSE, scrollbarY = FALSE,
+  gridLines = list(color = NULL, opacity = NULL, width = NULL),
+  legend = length(value) > 1, caption = NULL, button = if
+  (is.null(data2)) NULL else list(text = "Reset", color = NULL, fill =
+  NULL, position = 0.8), theme = NULL, style = "")
 }
 \arguments{
 \item{inputId}{the id of the container}
@@ -67,6 +68,10 @@ for the axis title}
 
 \item{yAxis}{settings of the category axis given as a list, or just a string
 for the axis title}
+
+\item{scrollbarX}{logical, whether to add a scrollbar for the value axis}
+
+\item{scrollbarY}{logical, whether to add a scrollbar for the category axis}
 
 \item{gridLines}{settings of the grid lines}
 

@@ -56,6 +56,8 @@ $.extend(barChartBinding, {
 		var tooltipStyle = $el.data("tooltipstyle");
 		var data2 = $el.data("data2");
 		var button = $el.data("button");
+		var scrollbarX = $el.data("scrollbarx");
+		var scrollbarY = $el.data("scrollbary");
 
 		/* ~~~~\  theme  /~~~~ */
 		if (theme !== null) {
@@ -95,7 +97,7 @@ $.extend(barChartBinding, {
 			title.fontSize = chartTitle.fontSize || 22;
 			title.fontWeight = "bold";
 			title.fontFamily = "Tahoma";
-			title.y = -42;
+			title.y = scrollbarX ? -52 : -42;
 			title.x = -45;
 			title.horizontalCenter = "left";
 			title.zIndex = 100;
@@ -109,6 +111,14 @@ $.extend(barChartBinding, {
       caption.fill =
         chartCaption.color || (theme === "dark" ? "#ffffff" : "#000000");
       caption.align = chartCaption.align || "right";
+    }
+
+    /* ~~~~\  scrollbars  /~~~~ */
+    if (scrollbarX) {
+      chart.scrollbarX = new am4core.Scrollbar();
+    }
+    if (scrollbarY) {
+      chart.scrollbarY = new am4core.Scrollbar();
     }
 
 		/* ~~~~\  button  /~~~~ */

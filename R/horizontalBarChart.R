@@ -29,6 +29,8 @@
 #' for the axis title
 #' @param yAxis settings of the category axis given as a list, or just a string
 #' for the axis title
+#' @param scrollbarX logical, whether to add a scrollbar for the value axis
+#' @param scrollbarY logical, whether to add a scrollbar for the category axis
 #' @param gridLines settings of the grid lines
 #' @param legend logical, whether to display the legend
 #' @param caption settings of the caption, or \code{NULL} for no caption
@@ -211,6 +213,8 @@ amHorizontalBarChart <- function(inputId, width = "100%", height = "400px",
                                      rotation = 0
                                    )
                                  ),
+                                 scrollbarX = FALSE,
+                                 scrollbarY = FALSE,
                                  gridLines = list(
                                    color = NULL,
                                    opacity = NULL,
@@ -311,7 +315,9 @@ amHorizontalBarChart <- function(inputId, width = "100%", height = "400px",
              `data-legend` = ifelse(legend, "true", "false"),
              `data-draggable` = as.character(toJSON(draggable)),
              `data-button` = list2json(button),
-             `data-caption` = list2json(caption)
+             `data-caption` = list2json(caption),
+             `data-scrollbarx` = ifelse(scrollbarX, "true", "false"),
+             `data-scrollbary` = ifelse(scrollbarY, "true", "false")
     )
   )
 }
