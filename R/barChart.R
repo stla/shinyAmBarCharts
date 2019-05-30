@@ -161,6 +161,31 @@
 #'   shinyApp(ui, server)
 #'
 #' }
+#'
+#' if(interactive()){
+#'
+#'   #' large bar chart => use scrollbars
+#'
+#'   dat <- cbind(Year = 1960:1986,
+#'                setNames(
+#'                  as.data.frame(matrix(UKgas, ncol = 4, byrow = TRUE)),
+#'                  c("Qtr1", "Qtr2", "Qtr3", "Qtr4")))
+#'
+#'   ui <- fluidPage(
+#'     amBarChart("UKgas", data = dat, height = "550px", category = "Year",
+#'                xAxis = list(title = "Year", labels = list(rotation = -45)),
+#'                value = c("Qtr1", "Qtr2", "Qtr3", "Qtr4"),
+#'                yAxis = "Gas consumption",
+#'                valueFormatter = "#.#",
+#'                scrollbarX = TRUE, scrollbarY = TRUE,
+#'                minValue = 0, maxValue = 1200,
+#'                chartTitle = "Quarterly UK gas consumption",
+#'                theme = "moonrisekingdom")
+#'   )
+#'   server <- function(input, output) {}
+#'   shinyApp(ui, server)
+#'
+#' }
 amBarChart <- function(inputId, width = "100%", height = "400px",
                        data, data2 = NULL,
                        category, value, valueNames = value,
@@ -243,6 +268,12 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
   if(is.character(tooltip)){
     tooltip <- list(text = tooltip)
   }
+  if(is.character(xAxis)){
+    xAxis <- list(title = list(text = xAxis))
+  }
+  if(is.character(yAxis)){
+    yAxis <- list(title = list(text = yAxis))
+  }
   if(is.character(xAxis[["title"]])){
     xAxis[["title"]] <- list(text = xAxis[["title"]])
   }
@@ -314,3 +345,4 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
     )
   )
 }
+

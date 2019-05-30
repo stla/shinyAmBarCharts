@@ -250,6 +250,12 @@ amHorizontalBarChart <- function(inputId, width = "100%", height = "400px",
   if(is.character(tooltip)){
     tooltip <- list(text = tooltip)
   }
+  if(is.character(xAxis)){
+    xAxis <- list(title = list(text = xAxis))
+  }
+  if(is.character(yAxis)){
+    yAxis <- list(title = list(text = yAxis))
+  }
   if(is.character(xAxis[["title"]])){
     xAxis[["title"]] <- list(text = xAxis[["title"]])
   }

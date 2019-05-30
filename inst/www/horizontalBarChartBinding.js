@@ -97,7 +97,7 @@ $.extend(horizontalBarChartBinding, {
 			title.fontSize = chartTitle.fontSize || 22;
 			title.fontWeight = "bold";
 			title.fontFamily = "Tahoma";
-			title.y = scrollbarX ? -52 : -42;
+			title.y = scrollbarX ? -56 : -42;
 			title.x = -45;
 			title.horizontalCenter = "left";
 			title.zIndex = 100;
@@ -261,35 +261,35 @@ $.extend(horizontalBarChartBinding, {
   			}); */
 			}
 
-			/* ~~~~\  label bullet  /~~~~ */
-			var labelBullet = new am4charts.LabelBullet();
-			series.bullets.push(labelBullet);
-			labelBullet.label.text =
+			/* ~~~~\  value label  /~~~~ */
+			var valueLabel = new am4charts.LabelBullet();
+			series.bullets.push(valueLabel);
+			valueLabel.label.text =
 				"{valueX.value.formatNumber('" + valueFormatter + "')}";
-			labelBullet.strokeOpacity = 0;
-			labelBullet.adapter.add("dx", (x, target) => {
+			valueLabel.strokeOpacity = 0;
+			valueLabel.adapter.add("dx", (x, target) => {
 				if (target.dataItem.valueX > 0) {
 					return -10;
 				} else {
 					return 10;
 				}
 			});
-			labelBullet.label.adapter.add("horizontalCenter", (x, target) => {
+			valueLabel.label.adapter.add("horizontalCenter", (x, target) => {
 				if (target.dataItem.valueX > 0) {
 					return "left";
 				} else {
 					return "right";
 				}
 			});
-			labelBullet.label.adapter.add("dx", (x, target) => {
+			valueLabel.label.adapter.add("dx", (x, target) => {
 				if (target.dataItem.valueX > 0) {
 					return 13;
 				} else {
 					return -13;
 				}
 			});
-			labelBullet.label.hideOversized = false;
-			labelBullet.label.truncate = false;
+			valueLabel.label.hideOversized = false;
+			valueLabel.label.truncate = false;
 
 			/* ~~~~\  bullet  /~~~~ */
 			if(draggable[i]){
@@ -387,13 +387,13 @@ $.extend(horizontalBarChartBinding, {
   			// hide label when hovered because the tooltip is shown
 	  		columnTemplate.events.on("over", event => {
 		  		var dataItem = event.target.dataItem;
-			  	var itemLabelBullet = dataItem.bullets.getKey(labelBullet.uid);
+			  	var itemLabelBullet = dataItem.bullets.getKey(valueLabel.uid);
 				  itemLabelBullet.fillOpacity = 0;
   			});
 	  		// show label when mouse is out
 		  	columnTemplate.events.on("out", event => {
 			  	var dataItem = event.target.dataItem;
-				  var itemLabelBullet = dataItem.bullets.getKey(labelBullet.uid);
+				  var itemLabelBullet = dataItem.bullets.getKey(valueLabel.uid);
   				itemLabelBullet.fillOpacity = 1;
 	  		});
 			}

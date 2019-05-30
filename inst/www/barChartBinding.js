@@ -97,7 +97,7 @@ $.extend(barChartBinding, {
 			title.fontSize = chartTitle.fontSize || 22;
 			title.fontWeight = "bold";
 			title.fontFamily = "Tahoma";
-			title.y = scrollbarX ? -52 : -42;
+			title.y = scrollbarX ? -56 : -42;
 			title.x = -45;
 			title.horizontalCenter = "left";
 			title.zIndex = 100;
@@ -154,6 +154,9 @@ $.extend(barChartBinding, {
 		var xAxisLabels = categoryAxis.renderer.labels.template;
 		xAxisLabels.fontSize = xAxis.labels.fontSize || 17;
 		xAxisLabels.rotation = xAxis.labels.rotation || 0;
+		if(xAxisLabels.rotation !== 0){
+		  xAxisLabels.horizontalCenter = "right";
+		}
 		xAxisLabels.fill =
 		  xAxis.labels.color || (theme === "dark" ? "#ffffff" : "#000000");
 		categoryAxis.dataFields.category = categoryField;
@@ -258,13 +261,15 @@ $.extend(barChartBinding, {
   			});
 			}
 
-			/* ~~~~\  label bullet  /~~~~ */
-			var labelBullet = new am4charts.LabelBullet();
-			series.bullets.push(labelBullet);
-			labelBullet.label.text =
+			/* ~~~~\  value label  /~~~~ */
+			var valueLabel = new am4charts.LabelBullet();
+			series.bullets.push(valueLabel);
+			valueLabel.label.text =
 				"{valueY.value.formatNumber('" + valueFormatter + "')}";
-			labelBullet.strokeOpacity = 0;
-			labelBullet.adapter.add("dy", (x, target) => {
+			valueLabel.label.hideOversized = true;
+			valueLabel.label.truncate = false;
+			valueLabel.strokeOpacity = 0;
+			valueLabel.adapter.add("dy", (x, target) => {
 				if (target.dataItem.valueY > 0) {
 					return -10;
 				} else {
@@ -368,13 +373,13 @@ $.extend(barChartBinding, {
   			// hide label when hovered because the tooltip is shown
 	  		columnTemplate.events.on("over", event => {
 		  		var dataItem = event.target.dataItem;
-			  	var itemLabelBullet = dataItem.bullets.getKey(labelBullet.uid);
+			  	var itemLabelBullet = dataItem.bullets.getKey(valueLabel.uid);
 				  itemLabelBullet.fillOpacity = 0;
   			});
 	  		// show label when mouse is out
 		  	columnTemplate.events.on("out", event => {
 			  	var dataItem = event.target.dataItem;
-				  var itemLabelBullet = dataItem.bullets.getKey(labelBullet.uid);
+				  var itemLabelBullet = dataItem.bullets.getKey(valueLabel.uid);
   				itemLabelBullet.fillOpacity = 1;
 	  		});
 			}
