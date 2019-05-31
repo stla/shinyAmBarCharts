@@ -11,15 +11,17 @@ amHorizontalBarChart(inputId, width = "100\%", height = "400px", data,
   labelColor = "#ffffff", backgroundColor = "#101010", backgroundOpacity =
   1, scale = 1), chartTitle = NULL, columnStyle = list(fill =
   rep(list(NULL), length(value)), stroke = NULL, cornerRadius = NULL),
-  backgroundColor = NULL, columnWidth = 80, xAxis = list(title =
-  list(text = category, fontSize = 20, color = NULL), labels = list(color =
-  NULL, fontSize = 18, rotation = 0)), yAxis = list(title = list(text =
-  value, fontSize = 20, color = NULL), labels = list(color = NULL, fontSize
-  = 18, rotation = 0)), scrollbarX = FALSE, scrollbarY = FALSE,
-  gridLines = list(color = NULL, opacity = NULL, width = NULL),
-  legend = length(value) > 1, caption = NULL, button = if
-  (is.null(data2)) NULL else list(text = "Reset", color = NULL, fill =
-  NULL, position = 0.8), theme = NULL, style = "")
+  backgroundColor = NULL, cellWidth = 90,
+  columnWidth = ifelse(length(value) == 1, 100, 90), xAxis = list(title
+  = list(text = category, fontSize = 20, color = NULL), labels = list(color
+  = NULL, fontSize = 18, rotation = 0)), yAxis = list(title = if
+  (length(value) == 1) {     list(text = value, fontSize = 20, color =
+  NULL) } else NULL, labels = list(color = NULL, fontSize = 18, rotation =
+  0)), scrollbarX = FALSE, scrollbarY = FALSE, gridLines = list(color
+  = NULL, opacity = NULL, width = NULL), legend = length(value) > 1,
+  caption = NULL, button = if (is.null(data2)) NULL else list(text =
+  "Reset", color = NULL, fill = NULL, position = 0.8), theme = NULL,
+  style = "")
 }
 \arguments{
 \item{inputId}{the id of the container}
@@ -61,7 +63,14 @@ given as a formatted string; see
 
 \item{backgroundColor}{a HTML color for the chart background}
 
-\item{columnWidth}{column width in percent}
+\item{cellWidth}{cell width in percent; for a simple bar chart, this is the
+width of the columns; for a grouped bar chart, this is the width of the
+clusters of columns}
+
+\item{columnWidth}{column width, a percentage of the cell width; set to 100
+for a simple bar chart and use \code{cellWidth} to control the width of the
+columns; for a grouped bar chart, this controls the spacing between the
+columns within a cluster of columns}
 
 \item{xAxis}{settings of the value axis given as a list, or just a string
 for the axis title}
@@ -122,7 +131,6 @@ if(interactive()){
                yAxis = list(title = list(text = "Country", color = "maroon")),
                minValue = 0, maxValue = 4000,
                valueFormatter = "#.",
-               columnWidth = 90,
                caption = list(text = "Year 2018", color = "red"),
                theme = "moonrisekingdom")),
       column(2,
@@ -188,7 +196,6 @@ if(interactive()){
                yAxis = list(title = list(text = "Country")),
                minValue = 0, maxValue = 41,
                valueFormatter = "#.#",
-               columnWidth = 90,
                caption = list(text = "Year 2018"),
                theme = "dark")
       ),

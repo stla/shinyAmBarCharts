@@ -11,15 +11,17 @@ amBarChart(inputId, width = "100\%", height = "400px", data,
   labelColor = "#ffffff", backgroundColor = "#101010", backgroundOpacity =
   1, scale = 1), chartTitle = NULL, columnStyle = list(fill =
   rep(list(NULL), length(value)), stroke = NULL, cornerRadius = NULL),
-  backgroundColor = NULL, columnWidth = 80, xAxis = list(title =
-  list(text = category, fontSize = 20, color = NULL), labels = list(color =
-  NULL, fontSize = 18, rotation = 0)), yAxis = list(title = list(text =
-  value, fontSize = 20, color = NULL), labels = list(color = NULL, fontSize
-  = 18, rotation = 0)), scrollbarX = FALSE, scrollbarY = FALSE,
-  gridLines = list(color = NULL, opacity = NULL, width = NULL),
-  legend = length(value) > 1, caption = NULL, button = if
-  (is.null(data2)) NULL else list(text = "Reset", color = NULL, fill =
-  NULL, position = 0.8), theme = NULL, style = "")
+  backgroundColor = NULL, cellWidth = 90,
+  columnWidth = ifelse(length(value) == 1, 100, 90), xAxis = list(title
+  = list(text = category, fontSize = 20, color = NULL), labels = list(color
+  = NULL, fontSize = 18, rotation = 0)), yAxis = list(title = if
+  (length(value) == 1) {     list(text = value, fontSize = 20, color =
+  NULL) } else NULL, labels = list(color = NULL, fontSize = 18, rotation =
+  0)), scrollbarX = FALSE, scrollbarY = FALSE, gridLines = list(color
+  = NULL, opacity = NULL, width = NULL), legend = length(value) > 1,
+  caption = NULL, button = if (is.null(data2)) NULL else list(text =
+  "Reset", color = NULL, fill = NULL, position = 0.8), theme = NULL,
+  style = "")
 }
 \arguments{
 \item{inputId}{the id of the container}
@@ -61,7 +63,14 @@ given as a formatted string; see
 
 \item{backgroundColor}{a HTML color for the chart background}
 
-\item{columnWidth}{column width in percent}
+\item{cellWidth}{cell width in percent; for a simple bar chart, this is the
+width of the columns; for a grouped bar chart, this is the width of the
+clusters of columns}
+
+\item{columnWidth}{column width, a percentage of the cell width; set to 100
+for a simple bar chart and use \code{cellWidth} to control the width of the
+columns; for a grouped bar chart, this controls the spacing between the
+columns within a cluster of columns}
 
 \item{xAxis}{settings of the category axis given as a list, or just a string
 for the axis title}
@@ -122,7 +131,6 @@ if(interactive()){
                yAxis = list(title = list(text = "Visits", color = "maroon")),
                minValue = 0, maxValue = 4000,
                valueFormatter = "#.",
-               columnWidth = 90,
                caption = list(text = "Year 2018", color = "red"),
                theme = "material")),
       column(4,
@@ -181,7 +189,6 @@ if(interactive()){
                yAxis = list(title = list(text = "Income and expenses")),
                minValue = 0, maxValue = 41,
                valueFormatter = "#.#",
-               columnWidth = 90,
                caption = list(text = "Year 2018"),
                theme = "dark")
       ),
@@ -211,7 +218,10 @@ if(interactive()){
 
 if(interactive()){
 
-  # large bar chart => use scrollbars
+  # large bar chart => use scrollbars ####
+
+  library(shiny)
+  library(shinyAmBarCharts)
 
   dat <- cbind(Year = 1960:1986,
                setNames(
@@ -232,5 +242,65 @@ if(interactive()){
   server <- function(input, output) {}
   shinyApp(ui, server)
 
+}
+
+if(interactive()){
+  # illustration of cellWidth and columnWidth ####
+
+  library(shiny)
+  library(shinyAmBarCharts)
+
+  set.seed(666)
+  dat <- data.frame(
+    country = c("USA", "China", "Japan", "Germany"),
+    visits = c(3025, 1882, 1809, 1322),
+    income = rpois(4, 25),
+    expenses = rpois(4, 20)
+  )
+
+  ui <- fluidPage(
+    fluidRow(
+      column(
+        6, amBarChart("chart1", data = dat, height = "300px",
+                      category = "country", value = "visits",
+                      minValue = 0, maxValue = 3500,
+                      cellWidth = 100,
+                      chartTitle = "cellWidth: 100")),
+      column(
+        6, amBarChart("chart2", data = dat, height = "300px",
+                      category = "country", value = "visits",
+                      minValue = 0, maxValue = 3500,
+                      cellWidth = 80,
+                      chartTitle = "cellWidth: 80"))
+    ),
+    fluidRow(
+      column(
+        4, amBarChart("chart3", data = dat, height = "300px",
+                      category = "country", value = c("income","expenses"),
+                      minValue = 0, maxValue = 40,
+                      cellWidth = 100, columnWidth = 100,
+                      chartTitle = list(
+                        text = "cellWidth: 100, columnWidth: 100",
+                        fontSize = 19))),
+      column(
+        4, amBarChart("chart4", data = dat, height = "300px",
+                      category = "country", value = c("income","expenses"),
+                      minValue = 0, maxValue = 40,
+                      cellWidth = 80, columnWidth = 100,
+                      chartTitle = list(
+                        text = "cellWidth: 80, columnWidth: 100",
+                        fontSize = 19))),
+      column(
+        4, amBarChart("chart5", data = dat, height = "300px",
+                      category = "country", value = c("income","expenses"),
+                      minValue = 0, maxValue = 40,
+                      cellWidth = 80, columnWidth = 80,
+                      chartTitle = list(
+                        text = "cellWidth: 80, columnWidth: 80",
+                        fontSize = 19)))
+    )
+  )
+
+  shinyApp(ui, server = function(input,output){})
 }
 }

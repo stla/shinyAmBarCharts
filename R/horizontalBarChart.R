@@ -24,7 +24,13 @@
 #' @param chartTitle chart title, \code{NULL}, character, or list of settings
 #' @param columnStyle settings of the columns style given as a list
 #' @param backgroundColor a HTML color for the chart background
-#' @param columnWidth column width in percent
+#' @param cellWidth cell width in percent; for a simple bar chart, this is the
+#' width of the columns; for a grouped bar chart, this is the width of the
+#' clusters of columns
+#' @param columnWidth column width, a percentage of the cell width; set to 100
+#' for a simple bar chart and use \code{cellWidth} to control the width of the
+#' columns; for a grouped bar chart, this controls the spacing between the
+#' columns within a cluster of columns
 #' @param xAxis settings of the value axis given as a list, or just a string
 #' for the axis title
 #' @param yAxis settings of the category axis given as a list, or just a string
@@ -75,7 +81,6 @@
 #'                yAxis = list(title = list(text = "Country", color = "maroon")),
 #'                minValue = 0, maxValue = 4000,
 #'                valueFormatter = "#.",
-#'                columnWidth = 90,
 #'                caption = list(text = "Year 2018", color = "red"),
 #'                theme = "moonrisekingdom")),
 #'       column(2,
@@ -141,7 +146,6 @@
 #'                yAxis = list(title = list(text = "Country")),
 #'                minValue = 0, maxValue = 41,
 #'                valueFormatter = "#.#",
-#'                columnWidth = 90,
 #'                caption = list(text = "Year 2018"),
 #'                theme = "dark")
 #'       ),
@@ -188,7 +192,8 @@ amHorizontalBarChart <- function(inputId, width = "100%", height = "400px",
                                    cornerRadius = NULL
                                  ),
                                  backgroundColor = NULL,
-                                 columnWidth = 80,
+                                 cellWidth = 90,
+                                 columnWidth = ifelse(length(value)==1, 100, 90),
                                  xAxis = list(
                                    title = list(
                                      text = category,
@@ -202,11 +207,12 @@ amHorizontalBarChart <- function(inputId, width = "100%", height = "400px",
                                    )
                                  ),
                                  yAxis = list(
-                                   title = list(
-                                     text = value,
-                                     fontSize = 20,
-                                     color = NULL
-                                   ),
+                                   title = if(length(value) == 1){
+                                     list(
+                                       text = value,
+                                       fontSize = 20,
+                                       color = NULL
+                                     )} else NULL,
                                    labels = list(
                                      color = NULL,
                                      fontSize = 18,
@@ -255,13 +261,13 @@ amHorizontalBarChart <- function(inputId, width = "100%", height = "400px",
   if(is.character(yAxis[["title"]])){
     yAxis[["title"]] <- list(text = yAxis[["title"]])
   }
-  if(is.null(xAxis[["title"]])){
-    xAxis[["title"]] <- list(
-      text = category,
-      fontSize = 20,
-      color = NULL
-    )
-  }
+  # if(is.null(xAxis[["title"]])){
+  #   xAxis[["title"]] <- list(
+  #     text = category,
+  #     fontSize = 20,
+  #     color = NULL
+  #   )
+  # }
   if(is.null(xAxis[["labels"]])){
     xAxis[["labels"]] <- list(
       color = NULL,
@@ -269,13 +275,13 @@ amHorizontalBarChart <- function(inputId, width = "100%", height = "400px",
       rotation = 0
     )
   }
-  if(is.null(yAxis[["title"]])){
-    yAxis[["title"]] <- list(
-      text = value,
-      fontSize = 20,
-      color = NULL
-    )
-  }
+  # if(is.null(yAxis[["title"]])){
+  #   yAxis[["title"]] <- list(
+  #     text = value,
+  #     fontSize = 20,
+  #     color = NULL
+  #   )
+  # }
   if(is.null(yAxis[["labels"]])){
     yAxis[["labels"]] <- list(
       color = NULL,
@@ -304,6 +310,7 @@ amHorizontalBarChart <- function(inputId, width = "100%", height = "400px",
              `data-tooltipstyle` = list2json(tooltip),
              `data-charttitle` = list2json(chartTitle),
              `data-columnstyle` = list2json(columnStyle),
+             `data-cellwidth` = max(50, min(cellWidth, 100)),
              `data-columnwidth` = max(10,min(columnWidth,100)),
              `data-xaxis` = list2json(xAxis),
              `data-yaxis` = list2json(yAxis),

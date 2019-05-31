@@ -39,6 +39,7 @@ $.extend(horizontalBarChartBinding, {
 		if (!(columnStyle.fill instanceof Array)){
 		  columnStyle.fill = [columnStyle.fill];
 		}
+		var cellWidth = $el.data("cellwidth");
 		var columnWidth = $el.data("columnwidth");
 		var xAxis = $el.data("xaxis");
 		var yAxis = $el.data("yaxis");
@@ -145,13 +146,15 @@ $.extend(horizontalBarChartBinding, {
 		var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
 		categoryAxis.renderer.inversed = true;
 		categoryAxis.renderer.grid.template.location = 0;
-		categoryAxis.renderer.cellStartLocation = 0.1;
-		categoryAxis.renderer.cellEndLocation = 0.9;
-		categoryAxis.title.text = yAxis.title.text || categoryField;
-		categoryAxis.title.fontWeight = "bold";
-		categoryAxis.title.fontSize = yAxis.title.fontSize || 20;
-		categoryAxis.title.fill =
-		  xAxis.title.color || (theme === "dark" ? "#ffffff" : "#000000");
+		categoryAxis.renderer.cellStartLocation = 1 - cellWidth/100;
+		categoryAxis.renderer.cellEndLocation = cellWidth/100;
+		if(yAxis !== null && yAxis.title !== null && yAxis.title.text !== ""){
+		  categoryAxis.title.text = yAxis.title.text || categoryField;
+		  categoryAxis.title.fontWeight = "bold";
+		  categoryAxis.title.fontSize = yAxis.title.fontSize || 20;
+		  categoryAxis.title.fill =
+		    yAxis.title.color || (theme === "dark" ? "#ffffff" : "#000000");
+		}
 		var yAxisLabels = categoryAxis.renderer.labels.template;
 		yAxisLabels.fontSize = yAxis.labels.fontSize || 17;
 		yAxisLabels.rotation = yAxis.labels.rotation || 0;
@@ -168,7 +171,7 @@ $.extend(horizontalBarChartBinding, {
       gridLines.color || (theme === "dark" ? "#ffffff" : "#000000");
     valueAxis.renderer.grid.template.strokeOpacity = gridLines.opacity || 0.15;
     valueAxis.renderer.grid.template.strokeWidth = gridLines.width || 1;
-		if (xAxis.title !== null) {
+		if (xAxis !== null && xAxis.title !== null && xAxis.title.text !== "") {
 			valueAxis.title.text = xAxis.title.text;
 			valueAxis.title.fontWeight = "bold";
 			valueAxis.title.fontSize = xAxis.title.fontSize || 20;

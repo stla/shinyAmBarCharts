@@ -24,7 +24,13 @@
 #' @param chartTitle chart title, \code{NULL}, character, or list of settings
 #' @param columnStyle settings of the columns style given as a list
 #' @param backgroundColor a HTML color for the chart background
-#' @param columnWidth column width in percent
+#' @param cellWidth cell width in percent; for a simple bar chart, this is the
+#' width of the columns; for a grouped bar chart, this is the width of the
+#' clusters of columns
+#' @param columnWidth column width, a percentage of the cell width; set to 100
+#' for a simple bar chart and use \code{cellWidth} to control the width of the
+#' columns; for a grouped bar chart, this controls the spacing between the
+#' columns within a cluster of columns
 #' @param xAxis settings of the category axis given as a list, or just a string
 #' for the axis title
 #' @param yAxis settings of the value axis given as a list, or just a string
@@ -75,7 +81,6 @@
 #'                yAxis = list(title = list(text = "Visits", color = "maroon")),
 #'                minValue = 0, maxValue = 4000,
 #'                valueFormatter = "#.",
-#'                columnWidth = 90,
 #'                caption = list(text = "Year 2018", color = "red"),
 #'                theme = "material")),
 #'       column(4,
@@ -134,7 +139,6 @@
 #'                yAxis = list(title = list(text = "Income and expenses")),
 #'                minValue = 0, maxValue = 41,
 #'                valueFormatter = "#.#",
-#'                columnWidth = 90,
 #'                caption = list(text = "Year 2018"),
 #'                theme = "dark")
 #'       ),
@@ -164,7 +168,10 @@
 #'
 #' if(interactive()){
 #'
-#'   # large bar chart => use scrollbars
+#'   # large bar chart => use scrollbars ####
+#'
+#'   library(shiny)
+#'   library(shinyAmBarCharts)
 #'
 #'   dat <- cbind(Year = 1960:1986,
 #'                setNames(
@@ -186,6 +193,66 @@
 #'   shinyApp(ui, server)
 #'
 #' }
+#'
+#' if(interactive()){
+#'   # illustration of cellWidth and columnWidth ####
+#'
+#'   library(shiny)
+#'   library(shinyAmBarCharts)
+#'
+#'   set.seed(666)
+#'   dat <- data.frame(
+#'     country = c("USA", "China", "Japan", "Germany"),
+#'     visits = c(3025, 1882, 1809, 1322),
+#'     income = rpois(4, 25),
+#'     expenses = rpois(4, 20)
+#'   )
+#'
+#'   ui <- fluidPage(
+#'     fluidRow(
+#'       column(
+#'         6, amBarChart("chart1", data = dat, height = "300px",
+#'                       category = "country", value = "visits",
+#'                       minValue = 0, maxValue = 3500,
+#'                       cellWidth = 100,
+#'                       chartTitle = "cellWidth: 100")),
+#'       column(
+#'         6, amBarChart("chart2", data = dat, height = "300px",
+#'                       category = "country", value = "visits",
+#'                       minValue = 0, maxValue = 3500,
+#'                       cellWidth = 80,
+#'                       chartTitle = "cellWidth: 80"))
+#'     ),
+#'     fluidRow(
+#'       column(
+#'         4, amBarChart("chart3", data = dat, height = "300px",
+#'                       category = "country", value = c("income","expenses"),
+#'                       minValue = 0, maxValue = 40,
+#'                       cellWidth = 100, columnWidth = 100,
+#'                       chartTitle = list(
+#'                         text = "cellWidth: 100, columnWidth: 100",
+#'                         fontSize = 19))),
+#'       column(
+#'         4, amBarChart("chart4", data = dat, height = "300px",
+#'                       category = "country", value = c("income","expenses"),
+#'                       minValue = 0, maxValue = 40,
+#'                       cellWidth = 80, columnWidth = 100,
+#'                       chartTitle = list(
+#'                         text = "cellWidth: 80, columnWidth: 100",
+#'                         fontSize = 19))),
+#'       column(
+#'         4, amBarChart("chart5", data = dat, height = "300px",
+#'                       category = "country", value = c("income","expenses"),
+#'                       minValue = 0, maxValue = 40,
+#'                       cellWidth = 80, columnWidth = 80,
+#'                       chartTitle = list(
+#'                         text = "cellWidth: 80, columnWidth: 80",
+#'                         fontSize = 19)))
+#'     )
+#'   )
+#'
+#'   shinyApp(ui, server = function(input,output){})
+#' }
 amBarChart <- function(inputId, width = "100%", height = "400px",
                        data, data2 = NULL,
                        category, value, valueNames = value,
@@ -206,7 +273,8 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
                          cornerRadius = NULL
                        ),
                        backgroundColor = NULL,
-                       columnWidth = 80,
+                       cellWidth = 90,
+                       columnWidth = ifelse(length(value)==1, 100, 90),
                        xAxis = list(
                          title = list(
                            text = category,
@@ -220,11 +288,12 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
                          )
                        ),
                        yAxis = list(
-                         title = list(
-                           text = value,
-                           fontSize = 20,
-                           color = NULL
-                         ),
+                         title = if(length(value)==1) {
+                           list(
+                             text = value,
+                             fontSize = 20,
+                             color = NULL
+                           )} else NULL,
                          labels = list(
                            color = NULL,
                            fontSize = 18,
@@ -255,6 +324,9 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
   if(is.character(chartTitle)){
     chartTitle <- list(text = chartTitle, fontSize = 22, color = NULL)
   }
+  if(is.character(chartTitle[["title"]])){
+    chartTitle[["title"]] <- list(text = chartTitle[["title"]])
+  }
   if(is.character(caption)){
     caption <- list(text = caption)
   }
@@ -273,13 +345,13 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
   if(is.character(yAxis[["title"]])){
     yAxis[["title"]] <- list(text = yAxis[["title"]])
   }
-  if(is.null(xAxis[["title"]])){
-    xAxis[["title"]] <- list(
-      text = category,
-      fontSize = 20,
-      color = NULL
-    )
-  }
+  # if(is.null(xAxis[["title"]])){
+  #   xAxis[["title"]] <- list(
+  #     text = category,
+  #     fontSize = 20,
+  #     color = NULL
+  #   )
+  # }
   if(is.null(xAxis[["labels"]])){
     xAxis[["labels"]] <- list(
       color = NULL,
@@ -287,13 +359,13 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
       rotation = 0
     )
   }
-  if(is.null(yAxis[["title"]])){
-    yAxis[["title"]] <- list(
-      text = value,
-      fontSize = 20,
-      color = NULL
-    )
-  }
+  # if(is.null(yAxis[["title"]])){
+  #   yAxis[["title"]] <- list(
+  #     text = value,
+  #     fontSize = 20,
+  #     color = NULL
+  #   )
+  # }
   if(is.null(yAxis[["labels"]])){
     yAxis[["labels"]] <- list(
       color = NULL,
@@ -322,7 +394,8 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
              `data-tooltipstyle` = list2json(tooltip),
              `data-charttitle` = list2json(chartTitle),
              `data-columnstyle` = list2json(columnStyle),
-             `data-columnwidth` = max(10,min(columnWidth,100)),
+             `data-cellwidth` = max(50, min(cellWidth, 100)),
+             `data-columnwidth` = max(10, min(columnWidth, 100)),
              `data-xaxis` = list2json(xAxis),
              `data-yaxis` = list2json(yAxis),
              `data-valueformatter` = valueFormatter,

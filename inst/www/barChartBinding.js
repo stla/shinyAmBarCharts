@@ -39,6 +39,7 @@ $.extend(barChartBinding, {
 		if (!(columnStyle.fill instanceof Array)){
 		  columnStyle.fill = [columnStyle.fill];
 		}
+		var cellWidth = $el.data("cellwidth");
 		var columnWidth = $el.data("columnwidth");
 		var xAxis = $el.data("xaxis");
 		var yAxis = $el.data("yaxis");
@@ -144,13 +145,15 @@ $.extend(barChartBinding, {
 		/* ~~~~\  category axis  /~~~~ */
 		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
 		categoryAxis.renderer.grid.template.location = 0;
-		categoryAxis.renderer.cellStartLocation = 0.1;
-		categoryAxis.renderer.cellEndLocation = 0.9;
-		categoryAxis.title.text = xAxis.title.text || categoryField;
-		categoryAxis.title.fontWeight = "bold";
-		categoryAxis.title.fontSize = xAxis.title.fontSize || 20;
-		categoryAxis.title.fill =
-		  xAxis.title.color || (theme === "dark" ? "#ffffff" : "#000000");
+		categoryAxis.renderer.cellStartLocation = 1 - cellWidth/100;
+		categoryAxis.renderer.cellEndLocation = cellWidth/100;
+		if(xAxis !== null && xAxis.title !== null && xAxis.title.text !== ""){
+  		categoryAxis.title.text = xAxis.title.text || categoryField;
+  		categoryAxis.title.fontWeight = "bold";
+  		categoryAxis.title.fontSize = xAxis.title.fontSize || 20;
+  		categoryAxis.title.fill =
+  		  xAxis.title.color || (theme === "dark" ? "#ffffff" : "#000000");
+		}
 		var xAxisLabels = categoryAxis.renderer.labels.template;
 		xAxisLabels.fontSize = xAxis.labels.fontSize || 17;
 		xAxisLabels.rotation = xAxis.labels.rotation || 0;
@@ -170,7 +173,7 @@ $.extend(barChartBinding, {
       gridLines.color || (theme === "dark" ? "#ffffff" : "#000000");
     valueAxis.renderer.grid.template.strokeOpacity = gridLines.opacity || 0.15;
     valueAxis.renderer.grid.template.strokeWidth = gridLines.width || 1;
-		if (yAxis.title !== null) {
+		if (yAxis !== null && yAxis.title !== null && yAxis.title.text !== "") {
 			valueAxis.title.text = yAxis.title.text;
 			valueAxis.title.fontWeight = "bold";
 			valueAxis.title.fontSize = yAxis.title.fontSize || 20;
