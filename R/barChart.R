@@ -47,7 +47,7 @@
 #'
 #' @export
 #' @import shiny
-#' @importFrom jsonlite fromJSON toJSON
+#' @importFrom jsonlite toJSON
 #' @examples
 #' if(interactive()){
 #'
@@ -164,7 +164,7 @@
 #'
 #' if(interactive()){
 #'
-#'   #' large bar chart => use scrollbars
+#'   # large bar chart => use scrollbars
 #'
 #'   dat <- cbind(Year = 1960:1986,
 #'                setNames(
@@ -248,13 +248,6 @@ amBarChart <- function(inputId, width = "100%", height = "400px",
                            position = 0.8),
                        theme = NULL,
                        style = ""){
-  addResourcePath(
-    prefix = "wwwAC",
-    directoryPath = system.file("www", package="shinyAmBarCharts")
-  )
-  registerInputHandler("shinyAmBarCharts.dataframe", function(data, ...) {
-    fromJSON(toJSON(data, auto_unbox = TRUE))
-  }, force = TRUE)
   if(!is.null(theme)){
     theme <- match.arg(theme, c("dataviz","material","kelly","dark",
                                 "frozen","moonrisekingdom","spiritedaway"))

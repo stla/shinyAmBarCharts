@@ -211,7 +211,7 @@ if(interactive()){
 
 if(interactive()){
 
-  #' large bar chart => use scrollbars
+  # large bar chart => use scrollbars
 
   dat <- cbind(Year = 1960:1986,
                setNames(
