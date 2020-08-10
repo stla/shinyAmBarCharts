@@ -2,6 +2,10 @@
 
 'AmCharts' bar charts for Shiny.
 
+**This package is obsolete. Use [rAmCharts4](https://github.com/stla/rAmCharts4) instead.**
+
+___
+
 *Installation:* `devtools::install_github("stla/shinyAmBarCharts")`
 
 ```r
